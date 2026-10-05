@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AcademiaDoZe.Presentation.AppMaui.ViewModels"
+             x:Class="AcademiaDoZe.Presentation.AppMaui.Views.LogradouroListPage"
+             x:DataType="vm:LogradouroListViewModel"
+             Title="{Binding Title}">
+
+    <Grid RowDefinitions="Auto, *">
+        <!-- Barra de Busca e Inclusão -->
+        <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Padding="10" ColumnSpacing="10">
+            <SearchBar Placeholder="Buscar por CEP ou Cidade..." Text="{Binding SearchText}" />
+            <Button Grid.Column="1" Text="+ Novo" Style="{StaticResource ButtonPrimary}" Command="{Binding AddLogradouroCommand}" />
+        </Grid>
+
+        <!-- Lista de Logradouros -->
+        <RefreshView Grid.Row="1" IsRefreshing="{Binding IsRefreshing}" Command="{Binding LoadLogradourosCommand}">
+            <CollectionView ItemsSource="{Binding Logradouros}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="x:Object">
+                        <Border Style="{StaticResource CardBorder}" Margin="10,5">
+                            <Grid ColumnDefinitions="*, Auto">
+                                <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                    <Label Text="{Binding LogradouroNome}" FontAttributes="Bold" FontSize="16" />
+                                    <Label Text="{Binding Bairro}" FontSize="14" TextColor="Gray" />
+                                    <Label Text="{Binding Cidade}" FontSize="12" TextColor="Gray" />
+                                </VerticalStackLayout>
+                                <Button Grid.Column="1" Text="Editar" Style="{StaticResource ButtonSecondary}" 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:LogradouroListViewModel}}, Path=EditLogradouroCommand}"
+                                        CommandParameter="{Binding .}" VerticalOptions="Center" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>
