@@ -26,10 +26,42 @@ public class MatriculaService : IMatriculaService
         return [.. matriculas.Select(m => m.ToDto())];
     }
 
+    public Task<IEnumerable<MatriculaDto>> ObterTodasAsync(CancellationToken cancellationToken = default)
+        => ObterTodosAsync(cancellationToken);
+
     public async Task<MatriculaDto?> ObterPorIdAsync(int id, CancellationToken cancellationToken = default)
     {
         var matricula = await _repoFactory().ObterPorId(id, cancellationToken);
         return matricula?.ToDto();
+    }
+
+    public async Task<IEnumerable<MatriculaDto>> ObterPorAlunoIdAsync(int alunoId, CancellationToken cancellationToken = default)
+    {
+        var matriculas = await _repoFactory().ObterPorAluno(alunoId, cancellationToken);
+        return [.. matriculas.Select(m => m.ToDto())];
+    }
+
+    public async Task<MatriculaDto?> ObterMatriculaAtivaPorAlunoAsync(int alunoId, CancellationToken cancellationToken = default)
+    {
+        var matricula = await _repoFactory().ObterMatriculaAtivaPorAluno(alunoId, cancellationToken);
+        return matricula?.ToDto();
+    }
+
+    public async Task<bool> PossuiMatriculaAtivaAsync(int alunoId, CancellationToken cancellationToken = default)
+    {
+        return await _repoFactory().PossuiMatriculaAtiva(alunoId, cancellationToken);
+    }
+
+    public async Task<IEnumerable<MatriculaDto>> ObterAtivasAsync(int alunoId = 0, CancellationToken cancellationToken = default)
+    {
+        var matriculas = await _repoFactory().ObterAtivas(alunoId, cancellationToken);
+        return [.. matriculas.Select(m => m.ToDto())];
+    }
+
+    public async Task<IEnumerable<MatriculaDto>> ObterVencendoEmDiasAsync(int dias, CancellationToken cancellationToken = default)
+    {
+        var matriculas = await _repoFactory().ObterVencendoEmDias(dias, cancellationToken);
+        return [.. matriculas.Select(m => m.ToDto())];
     }
 
     public async Task<MatriculaDto> AdicionarAsync(MatriculaDto matriculaDto, CancellationToken cancellationToken = default)
@@ -63,4 +95,3 @@ public class MatriculaService : IMatriculaService
         return await _repoFactory().Remover(id, cancellationToken);
     }
 }
-
