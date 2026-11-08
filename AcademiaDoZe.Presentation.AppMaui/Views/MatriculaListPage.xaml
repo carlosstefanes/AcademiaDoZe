@@ -25,82 +25,72 @@
 
                 <Grid Padding="1" Margin="5">
                     <Border Style="{StaticResource CardBorder}" Margin="10">
-                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto,Auto">
-                            <!-- Foto do Aluno em moldura elegante -->
-                            <Border Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="7"
-                                    HeightRequest="110" WidthRequest="110"
-                                    StrokeShape="RoundRectangle 12"
-                                    Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
-                                    StrokeThickness="1"
-                                    BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}"
-                                    Margin="0,0,10,0" VerticalOptions="Center">
-                                <Image Source="{Binding AlunoMatricula.Foto, Converter={StaticResource FotoToImageSourceConverter}}"
-                                       Aspect="AspectFill" HeightRequest="110" WidthRequest="110"/>
-                            </Border>
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,*">
+                            <!-- Coluna 0: Informações do Aluno e Matrícula -->
+                            <VerticalStackLayout Grid.Column="0" Grid.RowSpan="2" Spacing="4" VerticalOptions="Center" Margin="0,0,10,0">
+                                <Label Text="{Binding AlunoMatricula.Nome}" FontAttributes="Bold" FontSize="16" LineBreakMode="TailTruncation"/>
+                                <Label FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="CPF: "/>
+                                            <Span Text="{Binding AlunoMatricula.Cpf}"/>
+                                            <Span Text=" • Nasc: "/>
+                                            <Span Text="{Binding AlunoMatricula.DataNascimento, StringFormat='{0:dd/MM/yyyy}'}"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <HorizontalStackLayout Spacing="8" Margin="0,2">
+                                    <Border Padding="8,2" StrokeShape="RoundRectangle 4" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
+                                        <Label Text="{Binding Plano, Converter={StaticResource EnumDisplay}}" FontSize="11" FontAttributes="Bold" TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"/>
+                                    </Border>
+                                </HorizontalStackLayout>
+                                <Label FontSize="12">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="Vigência: " FontAttributes="Bold"/>
+                                            <Span Text="{Binding DataInicio, StringFormat='{0:dd/MM/yyyy}'}"/>
+                                            <Span Text=" até "/>
+                                            <Span Text="{Binding DataFim, StringFormat='{0:dd/MM/yyyy}'}"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label FontSize="12" LineBreakMode="TailTruncation">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="Objetivo: " FontAttributes="Bold"/>
+                                            <Span Text="{Binding Objetivo}"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label FontSize="12" LineBreakMode="TailTruncation">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="Restrições: " FontAttributes="Bold"/>
+                                            <Span Text="{Binding RestricoesMedicas, Converter={StaticResource RestricoesDisplay}}"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label Text="{Binding ObservacoesRestricoes, StringFormat='Obs: {0}'}" FontSize="11" TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}" LineBreakMode="TailTruncation"/>
+                            </VerticalStackLayout>
 
-                            <!-- Nome do Aluno -->
-                            <Label Grid.Row="0" Grid.Column="0" Text="{Binding AlunoMatricula.Nome}" FontAttributes="Bold" FontSize="16" Margin="0,0,0,2" LineBreakMode="TailTruncation"/>
-
-                            <!-- CPF e Nascimento -->
-                            <Label Grid.Row="1" Grid.Column="0" Margin="0,0,0,4" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}">
-                                <Label.FormattedText>
-                                    <FormattedString>
-                                        <Span Text="CPF: "/>
-                                        <Span Text="{Binding AlunoMatricula.Cpf}"/>
-                                        <Span Text=" • Nasc: "/>
-                                        <Span Text="{Binding AlunoMatricula.DataNascimento, StringFormat='{0:dd/MM/yyyy}'}"/>
-                                    </FormattedString>
-                                </Label.FormattedText>
-                            </Label>
-
-                            <!-- Badge do Plano -->
-                            <HorizontalStackLayout Grid.Row="2" Grid.Column="0" Spacing="8" Margin="0,0,0,4">
-                                <Border Padding="8,2" StrokeShape="RoundRectangle 4" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
-                                    <Label Text="{Binding Plano, Converter={StaticResource EnumDisplay}}" FontSize="11" FontAttributes="Bold" TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}"/>
-                                </Border>
-                            </HorizontalStackLayout>
-
-                            <!-- Vigência -->
-                            <Label Grid.Row="3" Grid.Column="0" Margin="0,0,0,3" FontSize="12">
-                                <Label.FormattedText>
-                                    <FormattedString>
-                                        <Span Text="Vigência: " FontAttributes="Bold"/>
-                                        <Span Text="{Binding DataInicio, StringFormat='{0:dd/MM/yyyy}'}"/>
-                                        <Span Text=" até "/>
-                                        <Span Text="{Binding DataFim, StringFormat='{0:dd/MM/yyyy}'}"/>
-                                    </FormattedString>
-                                </Label.FormattedText>
-                            </Label>
-
-                            <!-- Objetivo -->
-                            <Label Grid.Row="4" Grid.Column="0" Margin="0,0,0,3" FontSize="12" LineBreakMode="TailTruncation">
-                                <Label.FormattedText>
-                                    <FormattedString>
-                                        <Span Text="Objetivo: " FontAttributes="Bold"/>
-                                        <Span Text="{Binding Objetivo}"/>
-                                    </FormattedString>
-                                </Label.FormattedText>
-                            </Label>
-
-                            <!-- Restrições Médicas -->
-                            <Label Grid.Row="5" Grid.Column="0" Margin="0,0,0,3" FontSize="12" LineBreakMode="TailTruncation">
-                                <Label.FormattedText>
-                                    <FormattedString>
-                                        <Span Text="Restrições: " FontAttributes="Bold"/>
-                                        <Span Text="{Binding RestricoesMedicas, Converter={StaticResource RestricoesDisplay}}"/>
-                                    </FormattedString>
-                                </Label.FormattedText>
-                            </Label>
-
-                            <!-- Observações -->
-                            <Label Grid.Row="6" Grid.Column="0" Text="{Binding ObservacoesRestricoes, StringFormat='Obs: {0}'}" FontSize="11" TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}" LineBreakMode="TailTruncation" Margin="0,0,0,2"/>
-
-                            <!-- Botão de Ações extras -->
-                            <Button Grid.Row="0" Grid.Column="1" Text="" Style="{StaticResource ButtonSmall}" Margin="4,0" Clicked="OnMoreClicked" CommandParameter="{Binding .}">
+                            <!-- Coluna 1, Linha 0: Botão de Opções (...) -->
+                            <Button Grid.Column="1" Grid.Row="0" HorizontalOptions="End" VerticalOptions="Start" Style="{StaticResource ButtonSmall}" Margin="0,0,0,6" Clicked="OnMoreClicked" CommandParameter="{Binding .}">
                                 <Button.ImageSource>
                                     <FontImageSource FontFamily="MaterialIcons" Glyph="&#xe5d4;" />
                                 </Button.ImageSource>
                             </Button>
+
+                            <!-- Coluna 1, Linha 1: Foto do Aluno em moldura elegante -->
+                            <Border Grid.Column="1" Grid.Row="1"
+                                    HeightRequest="90" WidthRequest="90"
+                                    StrokeShape="RoundRectangle 12"
+                                    Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                                    StrokeThickness="1"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}"
+                                    HorizontalOptions="End" VerticalOptions="Center">
+                                <Image Source="{Binding AlunoMatricula.Foto, Converter={StaticResource FotoToImageSourceConverter}}"
+                                       Aspect="AspectFill" HeightRequest="90" WidthRequest="90"/>
+                            </Border>
                         </Grid>
                     </Border>
                 </Grid>

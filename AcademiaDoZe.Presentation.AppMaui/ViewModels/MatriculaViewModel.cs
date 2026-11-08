@@ -56,6 +56,7 @@ public partial class MatriculaViewModel : BaseViewModel
             if (SetProperty(ref _matricula, value))
             {
                 SyncSelectionFromFlags();
+                NotificarPropriedadesVisuais();
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿using AcademiaDoZe.Infrastructure.Data;
+using AcademiaDoZe.Infrastructure.Data;
 using Xunit;
 
 [assembly: CollectionBehavior(DisableTestParallelization = true)]
@@ -24,8 +24,8 @@ public abstract class TestBase
         // MySQL (ajuste a senha se necessário)
         DatabaseType.MySql => "Server=localhost;Database=db_academia_do_ze;User Id=root;Password=Car23Los07;",
 
-        // SQLite apontando para o seu arquivo real da D:\
-        DatabaseType.Sqlite => @"Data Source=D:\atv 5\academia_test.db;",
+        // SQLite apontando para um banco isolado para testes para não poluir o banco de apresentação
+        DatabaseType.Sqlite => @"Data Source=D:\atv 5\academia_tests_isolated.db;",
 
         _ => throw new ArgumentOutOfRangeException()
     };

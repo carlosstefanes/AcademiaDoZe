@@ -326,14 +326,34 @@ public class MatriculaRepository : BaseRepository<Matricula>, IMatriculaReposito
         byte[]? laudoBytes = reader["laudo_medico"] == DBNull.Value ? null : (byte[])reader["laudo_medico"];
         Arquivo? laudoMedico = laudoBytes != null ? Arquivo.Criar(laudoBytes).Value : null;
 
-        // Tenta obter o aluno através das colunas retornadas no reader.
-        // Se a coluna 'nome' não estiver no reader (ex: query sem JOIN), cria um mock básico com o aluno_id
+        // Mapeia o aluno e logradouro a partir das colunas retornadas no reader
         Aluno aluno;
         try
         {
-            aluno = AlunoRepository.Map(reader);
+            int alunoId = Convert.ToInt32(reader["id_aluno"]);
+            string alunoNome = reader["aluno_nome"]?.ToString() ?? reader["nome"]?.ToString() ?? "Aluno";
+            string alunoCpf = reader["cpf"]?.ToString() ?? "000.000.000-00";
+            DateOnly alunoNasc = DateOnly.FromDateTime(Convert.ToDateTime(reader["nascimento"]));
+            string alunoTel = reader["telefone"]?.ToString() ?? "";
+            string alunoEmail = reader["email"]?.ToString() ?? "";
+            string alunoNumero = reader["numero"]?.ToString() ?? "";
+            string? alunoCompl = reader["complemento"] == DBNull.Value ? null : reader["complemento"]?.ToString();
+            string alunoSenha = reader["senha"]?.ToString() ?? "";
+            byte[]? alunoFotoBytes = reader["foto"] == DBNull.Value ? null : (byte[])reader["foto"];
+            Arquivo? alunoFoto = alunoFotoBytes != null ? Arquivo.Criar(alunoFotoBytes).Value : null;
+
+            int logId = Convert.ToInt32(reader["id_logradouro"]);
+            string logCep = reader["cep"]?.ToString() ?? "";
+            string logNome = reader["logradouro_nome"]?.ToString() ?? reader["nome"]?.ToString() ?? "";
+            string logBairro = reader["bairro"]?.ToString() ?? "";
+            string logCidade = reader["cidade"]?.ToString() ?? "";
+            string logUf = reader["uf"]?.ToString() ?? "";
+            string logPais = reader["pais"]?.ToString() ?? "Brasil";
+            var logradouro = Logradouro.Criar(logId, logCep, logNome, logBairro, logCidade, logUf, logPais).Value!;
+
+            aluno = Aluno.Criar(alunoId, alunoNome, alunoCpf, alunoNasc, alunoTel, alunoEmail, logradouro, alunoNumero, alunoCompl, alunoSenha, alunoFoto).Value!;
         }
-        catch (ArgumentOutOfRangeException)
+        catch (Exception)
         {
             int alunoId = Convert.ToInt32(reader["aluno_id"]);
             var logradouroFake = Logradouro.Criar(1, "89520-000", "Rua Central", "Centro", "Curitibanos", "SC", "Brasil").Value!;
