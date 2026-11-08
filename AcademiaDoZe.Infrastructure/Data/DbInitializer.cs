@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AcademiaDoZe.Infrastructure.Data;
 using Microsoft.Data.SqlClient;
 using MySql.Data.MySqlClient;
 

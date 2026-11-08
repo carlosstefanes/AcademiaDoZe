@@ -1,4 +1,5 @@
-﻿using AcademiaDoZe.Domain;
+using AcademiaDoZe.Domain;
+using AcademiaDoZe.Infrastructure.Data;
 using System.Data;
 using System.Data.Common;
 using System.Globalization;
@@ -7,8 +8,11 @@ namespace AcademiaDoZe.Infrastructure.Repositories;
 
 public class ColaboradorRepository : BaseRepository<Colaborador>, IColaboradorRepository
 {
+    public ColaboradorRepository(string connectionString, DatabaseType databaseType)
+        : base(connectionString, databaseType) { }
+
     public ColaboradorRepository(DatabaseType databaseType, string connectionString)
-        : base(databaseType, connectionString) { }
+        : base(connectionString, databaseType) { }
 
     private static string BaseSelectQuery => @"
         SELECT 
@@ -374,13 +378,7 @@ public class ColaboradorRepository : BaseRepository<Colaborador>, IColaboradorRe
         return DateOnly.FromDateTime(Convert.ToDateTime(value));
     }
 
-    private static void AddParam(DbCommand command, string name, object? value)
-    {
-        var p = command.CreateParameter();
-        p.ParameterName = name;
-        p.Value = value ?? DBNull.Value;
-        command.Parameters.Add(p);
-    }
+
 
     private static void AddParameters(DbCommand command, Colaborador entity)
     {

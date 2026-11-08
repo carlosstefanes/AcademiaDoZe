@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:AcademiaDoZe.Presentation.AppMaui.ViewModels"
@@ -8,30 +8,39 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15">
-            <Label Text="CEP" FontAttributes="Bold" />
-            <Entry Text="{Binding Cep}" Placeholder="00000-000" Keyboard="Numeric" />
+            <!-- CEP com Busca -->
+            <Label Text="CEP *" FontAttributes="Bold" />
+            <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
+                <Entry Grid.Column="0" Text="{Binding Cep}" Placeholder="00000000" Keyboard="Numeric" MaxLength="8" />
+                <Button Grid.Column="1" Text="Buscar CEP" Style="{StaticResource ButtonSecondary}" Command="{Binding SearchByCepCommand}" />
+            </Grid>
 
-            <Label Text="Logradouro / Rua" FontAttributes="Bold" />
-            <Entry Text="{Binding LogradouroNome}" Placeholder="Nome da rua" />
+            <Label Text="Logradouro / Rua *" FontAttributes="Bold" />
+            <Entry Text="{Binding Nome}" Placeholder="Nome da rua ou avenida" />
 
-            <Label Text="Bairro" FontAttributes="Bold" />
+            <Label Text="Bairro *" FontAttributes="Bold" />
             <Entry Text="{Binding Bairro}" Placeholder="Nome do bairro" />
 
             <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
                 <VerticalStackLayout Grid.Column="0" Spacing="5">
-                    <Label Text="Cidade" FontAttributes="Bold" />
+                    <Label Text="Cidade *" FontAttributes="Bold" />
                     <Entry Text="{Binding Cidade}" Placeholder="Cidade" />
                 </VerticalStackLayout>
                 <VerticalStackLayout Grid.Column="1" Spacing="5">
-                    <Label Text="UF" FontAttributes="Bold" />
-                    <Entry Text="{Binding Uf}" Placeholder="UF" MaxLength="2" />
+                    <Label Text="Estado (UF) *" FontAttributes="Bold" />
+                    <Entry Text="{Binding Estado}" Placeholder="UF" MaxLength="2" />
                 </VerticalStackLayout>
             </Grid>
 
+            <Label Text="País" FontAttributes="Bold" />
+            <Entry Text="{Binding Pais}" Placeholder="Brasil" />
+
             <Grid ColumnDefinitions="*, *" ColumnSpacing="10" Margin="0,20,0,0">
-                <Button Grid.Column="0" Text="Cancelar" Style="{StaticResource ButtonSecondary}" Command="{Binding CancelCommand}" />
-                <Button Grid.Column="1" Text="Salvar" Style="{StaticResource ButtonPrimary}" Command="{Binding SaveCommand}" />
+                <Button Grid.Column="0" Text="Cancelar" Style="{StaticResource ButtonSecondary}" Clicked="OnCancelClicked" />
+                <Button Grid.Column="1" Text="Salvar" Style="{StaticResource ButtonPrimary}" Command="{Binding SaveLogradouroCommand}" />
             </Grid>
+
+            <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" HorizontalOptions="Center" VerticalOptions="Center" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

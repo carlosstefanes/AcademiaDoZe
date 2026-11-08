@@ -1,15 +1,16 @@
-﻿namespace AcademiaDoZe.Domain;
+namespace AcademiaDoZe.Domain.Enums;
 
 public enum ColaboradorTipo
 {
-    Administrador = 1,
+    Administrador = 0,
+    Atendente = 1,
     Instrutor = 2,
     Recepcionista = 3
 }
 
 public enum ColaboradorVinculo
 {
-    CLT = 1,
-    PJ = 2,
-    Estagio = 3
+    CLT = 0,
+    Estagio = 1,
+    PJ = 2
 }

@@ -1,11 +1,14 @@
-﻿namespace AcademiaDoZe.Presentation.AppMaui;
-
-public partial class App : Microsoft.Maui.Controls.Application
+﻿namespace AcademiaDoZe.Presentation.AppMaui
 {
-    public App()
+    public partial class App : Microsoft.Maui.Controls.Application
     {
-        InitializeComponent();
-
-        MainPage = new AppShell();
+        public App()
+        {
+            InitializeComponent();
+        }
+        protected override Window CreateWindow(IActivationState? activationState)
+        {
+            return new Window(new AppShell());
+        }
     }
 }

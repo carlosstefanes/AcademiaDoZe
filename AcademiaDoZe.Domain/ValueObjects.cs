@@ -1,4 +1,8 @@
-﻿namespace AcademiaDoZe.Domain;
+using System.Linq;
+using AcademiaDoZe.Domain;
+using AcademiaDoZe.Domain.Entities;
+
+namespace AcademiaDoZe.Domain.ValueObjects;
 
 public record Cpf(string Valor)
 {
@@ -29,4 +33,19 @@ public record Endereco(int LogradouroId, string Numero, string? Complemento)
 public record Arquivo(byte[] Conteudo)
 {
     public static Result<Arquivo> Criar(byte[] conteudo) => Result<Arquivo>.Success(new Arquivo(conteudo));
+}
+
+public record Cep(string Valor)
+{
+    public static Result<Cep> Criar(string? valor)
+    {
+        if (string.IsNullOrWhiteSpace(valor))
+            return Result<Cep>.Failure("O CEP é obrigatório.");
+
+        var apenasDigitos = new string(valor.Where(char.IsDigit).ToArray());
+        if (apenasDigitos.Length != 8)
+            return Result<Cep>.Failure("O CEP deve conter 8 dígitos.");
+
+        return Result<Cep>.Success(new Cep(apenasDigitos));
+    }
 }

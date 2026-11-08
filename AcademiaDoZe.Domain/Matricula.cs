@@ -1,4 +1,4 @@
-﻿namespace AcademiaDoZe.Domain;
+﻿namespace AcademiaDoZe.Domain.Entities;
 
 public class Matricula : Entity
 {

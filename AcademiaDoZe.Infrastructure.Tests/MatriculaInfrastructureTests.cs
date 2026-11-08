@@ -1,4 +1,4 @@
-﻿using AcademiaDoZe.Domain;
+using AcademiaDoZe.Domain;
 using AcademiaDoZe.Infrastructure.Repositories;
 using Xunit;
 
@@ -10,7 +10,7 @@ public class MatriculaInfrastructureTests : TestBase
     // EXIGÊNCIA DO PROFESSOR:
     // Altere a string abaixo colocando o seu NOME COMPLETO.
     // =========================================================================
-    private const string NOME_DO_ALUNO = "Carlos Eduardo Pomerening Stefanes";
+    private const string NOME_DO_ALUNO = "Carlos Eduardo Pomerening";
 
     private readonly MatriculaRepository _repository;
     private readonly AlunoRepository _alunoRepository;
@@ -18,12 +18,12 @@ public class MatriculaInfrastructureTests : TestBase
 
     public MatriculaInfrastructureTests()
     {
-        _repository = new MatriculaRepository(SelectedDatabaseType, ConnectionString);
-        _alunoRepository = new AlunoRepository(SelectedDatabaseType, ConnectionString);
-        _logradouroRepository = new LogradouroRepository(SelectedDatabaseType, ConnectionString);
+        _repository = new MatriculaRepository(ConnectionString, SelectedDatabaseType);
+        _alunoRepository = new AlunoRepository(ConnectionString, SelectedDatabaseType);
+        _logradouroRepository = new LogradouroRepository(ConnectionString, SelectedDatabaseType);
     }
 
-    private string NomeSgbd => SelectedDatabaseType.ToString();
+    private string NomeSgbd => SelectedDatabaseType == DatabaseType.Sqlite ? "SQLite" : SelectedDatabaseType.ToString();
 
     private async Task<Aluno> CriarAlunoBaseAsync()
     {

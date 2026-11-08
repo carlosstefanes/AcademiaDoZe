@@ -1,5 +1,7 @@
-﻿using AcademiaDoZe.Domain;
+using AcademiaDoZe.Domain;
+using AcademiaDoZe.Domain.Entities;
 using AcademiaDoZe.Infrastructure;
+using AcademiaDoZe.Infrastructure.Data;
 using System.Data.Common;
 
 namespace AcademiaDoZe.Infrastructure.Repositories;
@@ -9,11 +11,17 @@ public abstract class BaseRepository<T> where T : Entity
     protected string ConnectionString { get; }
     protected DatabaseType DatabaseType { get; }
 
-    protected BaseRepository(DatabaseType databaseType, string connectionString)
+    protected BaseRepository(string connectionString, DatabaseType databaseType)
     {
-        DatabaseType = databaseType;
         ConnectionString = connectionString;
+        DatabaseType = databaseType;
     }
+
+    protected BaseRepository(DatabaseType databaseType, string connectionString)
+        : this(connectionString, databaseType)
+    {
+    }
+
     protected static void AddParam(DbCommand command, string name, object? value)
     {
         var parameter = command.CreateParameter();

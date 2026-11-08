@@ -2,6 +2,7 @@
 using MySql.Data.MySqlClient;
 using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
+using AcademiaDoZe.Infrastructure.Data;
 
 namespace AcademiaDoZe.Infrastructure;
 

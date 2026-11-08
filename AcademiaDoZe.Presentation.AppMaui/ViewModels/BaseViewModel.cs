@@ -1,15 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-
 namespace AcademiaDoZe.Presentation.AppMaui.ViewModels;
 
 public partial class BaseViewModel : ObservableObject
 {
-    [ObservableProperty]
-    private bool _isBusy;
+    private bool isBusy;
+    public bool IsBusy { get => isBusy; set => SetProperty(ref isBusy, value); }
 
-    [ObservableProperty]
-    private string _title = string.Empty;
+    private string title = string.Empty;
+    public string Title { get => title; set => SetProperty(ref title, value); }
 
-    [ObservableProperty]
-    private bool _isRefreshing;
+    private bool isRefreshing;
+    public bool IsRefreshing { get => isRefreshing; set => SetProperty(ref isRefreshing, value); }
 }

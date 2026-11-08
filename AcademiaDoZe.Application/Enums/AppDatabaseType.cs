@@ -2,7 +2,7 @@
 
 public enum AppDatabaseType
 {
-    SqlServer = 1,
-    MySql = 2,
-    Sqlite = 3
+    SqlServer,
+    MySql,
+    Sqlite
 }

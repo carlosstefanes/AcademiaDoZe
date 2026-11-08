@@ -1,53 +1,65 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:AcademiaDoZe.Presentation.AppMaui.ViewModels"
              x:Class="AcademiaDoZe.Presentation.AppMaui.Views.DashboardListPage"
+             xmlns:vm="clr-namespace:AcademiaDoZe.Presentation.AppMaui.ViewModels"
              x:DataType="vm:DashboardListViewModel"
              Title="{Binding Title}">
-
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="20">
-            <!-- Imagem Personalizada com o seu Nome -->
-            <Image Source="academiadoze.png" HeightRequest="100" HorizontalOptions="Center" />
+        <Grid RowDefinitions="Auto,*" Padding="20">
+            <StackLayout Grid.Row="0" Spacing="10" Margin="0,0,0,20">
+                <Image Source="academiadoze.png" HorizontalOptions="Center" VerticalOptions="Start" HeightRequest="180" WidthRequest="180"/>
+                <Label Text="Academia do Zé" Style="{StaticResource Headline}" HorizontalTextAlignment="Center"/>
+                <Label Text="Sistema de Gerenciamento" Style="{StaticResource SubHeadline}" HorizontalTextAlignment="Center"/>
+            </StackLayout>
 
-            <Label Text="Visão Geral do Sistema" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" />
-
-            <!-- Grid de Cards de Indicadores -->
-            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="12">
+            <Grid Grid.Row="1" RowDefinitions="Auto,Auto" ColumnDefinitions="*,*" RowSpacing="15" ColumnSpacing="15">
                 <!-- Card Logradouros -->
                 <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource CardBorder}">
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Logradouros" FontSize="14" TextColor="Gray" />
-                        <Label Text="{Binding TotalLogradouros}" FontSize="28" FontAttributes="Bold" />
-                        <Button Text="Ver Todos" Style="{StaticResource ButtonPrimary}" Command="{Binding NavigateToLogradourosCommand}" Margin="0,10,0,0"/>
-                    </VerticalStackLayout>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateToLogradourosCommand}"/>
+                    </Border.GestureRecognizers>
+                    <StackLayout Spacing="10">
+                        <Label Text="{Binding TotalLogradouros}" Style="{StaticResource SubHeadline}" HorizontalTextAlignment="Center"/>
+                        <Label Text="Logradouros" HorizontalTextAlignment="Center"/>
+                    </StackLayout>
                 </Border>
 
                 <!-- Card Alunos -->
                 <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource CardBorder}">
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Alunos" FontSize="14" TextColor="Gray" />
-                        <Label Text="{Binding TotalAlunos}" FontSize="28" FontAttributes="Bold" />
-                    </VerticalStackLayout>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateToAlunosCommand}"/>
+                    </Border.GestureRecognizers>
+                    <StackLayout Spacing="10">
+                        <Label Text="{Binding TotalAlunos}" Style="{StaticResource SubHeadline}" HorizontalTextAlignment="Center"/>
+                        <Label Text="Alunos" HorizontalTextAlignment="Center"/>
+                    </StackLayout>
                 </Border>
 
                 <!-- Card Colaboradores -->
                 <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource CardBorder}">
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Colaboradores" FontSize="14" TextColor="Gray" />
-                        <Label Text="{Binding TotalColaboradores}" FontSize="28" FontAttributes="Bold" />
-                    </VerticalStackLayout>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateToColaboradoresCommand}"/>
+                    </Border.GestureRecognizers>
+                    <StackLayout Spacing="10">
+                        <Label Text="{Binding TotalColaboradores}" Style="{StaticResource SubHeadline}" HorizontalTextAlignment="Center"/>
+                        <Label Text="Colaboradores" HorizontalTextAlignment="Center"/>
+                    </StackLayout>
                 </Border>
 
                 <!-- Card Matrículas -->
                 <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource CardBorder}">
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Matrículas" FontSize="14" TextColor="Gray" />
-                        <Label Text="{Binding TotalMatriculas}" FontSize="28" FontAttributes="Bold" />
-                    </VerticalStackLayout>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateToMatriculasCommand}"/>
+                    </Border.GestureRecognizers>
+                    <StackLayout Spacing="10">
+                        <Label Text="{Binding TotalMatriculas}" Style="{StaticResource SubHeadline}" HorizontalTextAlignment="Center"/>
+                        <Label Text="Matrículas" HorizontalTextAlignment="Center"/>
+                    </StackLayout>
                 </Border>
             </Grid>
-        </VerticalStackLayout>
+
+            <ActivityIndicator Grid.Row="0" Grid.RowSpan="2" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" VerticalOptions="Center" HorizontalOptions="Center" />
+        </Grid>
     </ScrollView>
 </ContentPage>

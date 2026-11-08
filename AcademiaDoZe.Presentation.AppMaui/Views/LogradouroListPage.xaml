@@ -1,33 +1,51 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:AcademiaDoZe.Presentation.AppMaui.ViewModels"
+             xmlns:dto="clr-namespace:AcademiaDoZe.Application.DTOs;assembly=AcademiaDoZe.Application"
              x:Class="AcademiaDoZe.Presentation.AppMaui.Views.LogradouroListPage"
              x:DataType="vm:LogradouroListViewModel"
              Title="{Binding Title}">
 
     <Grid RowDefinitions="Auto, *">
-        <!-- Barra de Busca e Inclusão -->
-        <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Padding="10" ColumnSpacing="10">
-            <SearchBar Placeholder="Buscar por CEP ou Cidade..." Text="{Binding SearchText}" />
-            <Button Grid.Column="1" Text="+ Novo" Style="{StaticResource ButtonPrimary}" Command="{Binding AddLogradouroCommand}" />
+        <!-- Barra de Busca, Filtro e Inclusão -->
+        <Grid Grid.Row="0" RowDefinitions="Auto, Auto" ColumnDefinitions="*, Auto" Padding="10" RowSpacing="8" ColumnSpacing="10">
+            <SearchBar Grid.Row="0" Grid.Column="0" Placeholder="Pesquisar..." Text="{Binding SearchText}" />
+            <Button Grid.Row="0" Grid.Column="1" Text="+ Novo" Style="{StaticResource ButtonPrimary}" Command="{Binding AddLogradouroCommand}" />
+            
+            <HorizontalStackLayout Grid.Row="1" Grid.ColumnSpan="2" Spacing="10" VerticalOptions="Center">
+                <Label Text="Filtrar por:" VerticalOptions="Center"/>
+                <Picker ItemsSource="{Binding FilterOptions}" SelectedItem="{Binding SelectedFilterOption}" WidthRequest="150"/>
+            </HorizontalStackLayout>
         </Grid>
 
         <!-- Lista de Logradouros -->
         <RefreshView Grid.Row="1" IsRefreshing="{Binding IsRefreshing}" Command="{Binding LoadLogradourosCommand}">
             <CollectionView ItemsSource="{Binding Logradouros}">
+                <CollectionView.EmptyView>
+                    <Label Text="Nenhum logradouro encontrado." HorizontalOptions="Center" VerticalOptions="Center" Margin="20"/>
+                </CollectionView.EmptyView>
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="x:Object">
+                    <DataTemplate x:DataType="dto:LogradouroDto">
                         <Border Style="{StaticResource CardBorder}" Margin="10,5">
-                            <Grid ColumnDefinitions="*, Auto">
+                            <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
                                 <VerticalStackLayout Grid.Column="0" Spacing="2">
-                                    <Label Text="{Binding LogradouroNome}" FontAttributes="Bold" FontSize="16" />
+                                    <Label Text="{Binding Nome}" FontAttributes="Bold" FontSize="16" />
                                     <Label Text="{Binding Bairro}" FontSize="14" TextColor="Gray" />
-                                    <Label Text="{Binding Cidade}" FontSize="12" TextColor="Gray" />
+                                    <Label FontSize="12" TextColor="Gray">
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{}{0} - {1}/{2}">
+                                                <Binding Path="Cep" />
+                                                <Binding Path="Cidade" />
+                                                <Binding Path="Estado" />
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
                                 </VerticalStackLayout>
-                                <Button Grid.Column="1" Text="Editar" Style="{StaticResource ButtonSecondary}" 
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:LogradouroListViewModel}}, Path=EditLogradouroCommand}"
-                                        CommandParameter="{Binding .}" VerticalOptions="Center" />
+                                <HorizontalStackLayout Grid.Column="1" Spacing="6" VerticalOptions="Center">
+                                    <Button Text="Editar" Style="{StaticResource ButtonSecondary}" Clicked="OnEditButtonClicked" />
+                                    <Button Text="Excluir" Style="{StaticResource ButtonDanger}" Clicked="OnDeleteButtonClicked" />
+                                </HorizontalStackLayout>
                             </Grid>
                         </Border>
                     </DataTemplate>

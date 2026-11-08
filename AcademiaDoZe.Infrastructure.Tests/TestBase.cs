@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using AcademiaDoZe.Infrastructure.Data;
+using Xunit;
 
 [assembly: CollectionBehavior(DisableTestParallelization = true)]
 

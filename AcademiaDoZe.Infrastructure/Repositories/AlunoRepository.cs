@@ -1,4 +1,5 @@
-﻿using AcademiaDoZe.Domain;
+using AcademiaDoZe.Domain;
+using AcademiaDoZe.Infrastructure.Data;
 using System.Data;
 using System.Data.Common;
 
@@ -6,8 +7,11 @@ namespace AcademiaDoZe.Infrastructure.Repositories;
 
 public class AlunoRepository : BaseRepository<Aluno>, IAlunoRepository
 {
+    public AlunoRepository(string connectionString, DatabaseType databaseType)
+        : base(connectionString, databaseType) { }
+
     public AlunoRepository(DatabaseType databaseType, string connectionString)
-        : base(databaseType, connectionString) { }
+        : base(connectionString, databaseType) { }
 
     private static string BaseSelectQuery => @"
         SELECT 
@@ -258,13 +262,7 @@ public class AlunoRepository : BaseRepository<Aluno>, IAlunoRepository
         return result.Value!;
     }
 
-    private static void AddParam(DbCommand command, string name, object? value)
-    {
-        var p = command.CreateParameter();
-        p.ParameterName = name;
-        p.Value = value ?? DBNull.Value;
-        command.Parameters.Add(p);
-    }
+
 
     private static void AddParameters(DbCommand command, Aluno entity)
     {
