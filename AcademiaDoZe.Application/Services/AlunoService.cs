@@ -34,6 +34,18 @@ public class AlunoService : IAlunoService
         return aluno?.ToDto();
     }
 
+    public async Task<AlunoDto?> ObterPorCpfAsync(string cpf, CancellationToken cancellationToken = default)
+    {
+        var aluno = await _repoFactory().ObterPorCpf(cpf, cancellationToken);
+        return aluno?.ToDto();
+    }
+
+    public async Task<AlunoDto?> ObterPorEmailAsync(string email, CancellationToken cancellationToken = default)
+    {
+        var aluno = await _repoFactory().ObterPorEmail(email, cancellationToken);
+        return aluno?.ToDto();
+    }
+
     public async Task<AlunoDto> AdicionarAsync(AlunoDto alunoDto, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(alunoDto);
@@ -98,4 +110,3 @@ public class AlunoService : IAlunoService
         return await _repoFactory().Remover(id, cancellationToken);
     }
 }
-

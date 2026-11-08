@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AcademiaDoZe.Application.DTOs;
+using AcademiaDoZe.Application.Enums;
 using AcademiaDoZe.Application.Interfaces;
 using AcademiaDoZe.Application.Mappings;
 using AcademiaDoZe.Application.Security;
@@ -32,6 +33,32 @@ public class ColaboradorService : IColaboradorService
     {
         var colaborador = await _repoFactory().ObterPorId(id, cancellationToken);
         return colaborador?.ToDto();
+    }
+
+    public async Task<ColaboradorDto?> ObterPorCpfAsync(string cpf, CancellationToken cancellationToken = default)
+    {
+        var colaborador = await _repoFactory().ObterPorCpf(cpf, cancellationToken);
+        return colaborador?.ToDto();
+    }
+
+    public async Task<ColaboradorDto?> ObterPorEmailAsync(string email, CancellationToken cancellationToken = default)
+    {
+        var colaborador = await _repoFactory().ObterPorEmail(email, cancellationToken);
+        return colaborador?.ToDto();
+    }
+
+    public async Task<IEnumerable<ColaboradorDto>> ObterPorTipoAsync(AppColaboradorTipo tipo, CancellationToken cancellationToken = default)
+    {
+        var domainTipo = tipo.ToDomain();
+        var colaboradores = await _repoFactory().ObterPorTipo(domainTipo, cancellationToken);
+        return [.. colaboradores.Select(c => c.ToDto())];
+    }
+
+    public async Task<IEnumerable<ColaboradorDto>> ObterPorVinculoAsync(AppColaboradorVinculo vinculo, CancellationToken cancellationToken = default)
+    {
+        var domainVinculo = vinculo.ToDomain();
+        var colaboradores = await _repoFactory().ObterPorVinculo(domainVinculo, cancellationToken);
+        return [.. colaboradores.Select(c => c.ToDto())];
     }
 
     public async Task<ColaboradorDto> AdicionarAsync(ColaboradorDto colaboradorDto, CancellationToken cancellationToken = default)
@@ -98,4 +125,3 @@ public class ColaboradorService : IColaboradorService
         return await _repoFactory().Remover(id, cancellationToken);
     }
 }
-

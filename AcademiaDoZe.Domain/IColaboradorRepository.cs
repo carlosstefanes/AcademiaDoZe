@@ -13,4 +13,6 @@ public interface IColaboradorRepository : IRepository<Colaborador>
     Task<Colaborador?> ObterPorEmail(string email, CancellationToken cancellationToken = default);
     Task<bool> CpfJaExiste(string cpf, int? id = null, CancellationToken cancellationToken = default);
     Task<bool> EmailJaExiste(string email, int? id = null, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Colaborador>> ObterPorTipo(ColaboradorTipo tipo, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Colaborador>> ObterPorVinculo(ColaboradorVinculo vinculo, CancellationToken cancellationToken = default);
 }
