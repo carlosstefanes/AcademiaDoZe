@@ -80,13 +80,14 @@ public class MatriculaInfrastructureTests : TestBase
             1, "88501000", "Rua dos Testes", "Centro", "Lages", "SC", "Brasil"
         ).Value!;
 
+        string uniqueId = Guid.NewGuid().ToString("N")[..8];
         var aluno = Aluno.Criar(
             0,
-            $"Aluno Teste {Random.Shared.Next(1000, 9999)}",
-            $"{Random.Shared.Next(100, 999)}.456.789-{Random.Shared.Next(10, 99)}",
+            $"Aluno Teste {uniqueId}",
+            $"{Random.Shared.Next(100, 999)}.{Random.Shared.Next(100, 999)}.{Random.Shared.Next(100, 999)}-{Random.Shared.Next(10, 99)}",
             new DateOnly(1998, 5, 20),
-            "49999999999",
-            $"aluno{Random.Shared.Next(10000, 99999)}@teste.com",
+            $"499{Random.Shared.Next(10000000, 99999999)}",
+            $"aluno_{Guid.NewGuid():N}@teste.com",
             logradouro,
             "123",
             "Apto 1",

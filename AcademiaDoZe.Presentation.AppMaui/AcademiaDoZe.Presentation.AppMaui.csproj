@@ -15,7 +15,7 @@
 		<NoWarn>$(NoWarn);MVVMTK0045;CS0618</NoWarn>
 
 		<!-- Display name e Identificadores -->
-		<ApplicationTitle>Academia do Zé - Carlos Eduardo</ApplicationTitle>
+		<ApplicationTitle>Academia do Zé - Carlos Eduardo Pomerening</ApplicationTitle>
 		<ApplicationId>com.Carlos.academiadoze</ApplicationId>
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>

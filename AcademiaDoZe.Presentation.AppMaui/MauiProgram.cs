@@ -1,7 +1,8 @@
+using AcademiaDoZe.Presentation.AppMaui.Configuration;
 using AcademiaDoZe.Presentation.AppMaui.ViewModels;
 using AcademiaDoZe.Presentation.AppMaui.Views;
 using Microsoft.Extensions.Logging;
-using AcademiaDoZe.Presentation.AppMaui.Configuration;
+
 namespace AcademiaDoZe.Presentation.AppMaui;
 
 public static class MauiProgram
@@ -15,6 +16,7 @@ public static class MauiProgram
                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                    fonts.AddFont("MaterialSymbolsOutlined.ttf", "MaterialSymbolsOutlined");
+                   fonts.AddFont("MaterialIcons-Regular.ttf", "MaterialIcons");
                });
 
         ConfigurationHelper.ConfigureServices(builder.Services);
@@ -26,6 +28,7 @@ public static class MauiProgram
         builder.Services.AddTransient<DashboardListPage>();
         builder.Services.AddTransient<LogradouroListPage>();
         builder.Services.AddTransient<LogradouroPage>();
+        builder.Services.AddTransient<ConfigPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

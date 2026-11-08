@@ -1,4 +1,5 @@
-﻿using AcademiaDoZe.Presentation.AppMaui.Views;
+using AcademiaDoZe.Presentation.AppMaui.Views;
+
 namespace AcademiaDoZe.Presentation.AppMaui;
 
 public partial class AppShell : Shell
@@ -8,8 +9,10 @@ public partial class AppShell : Shell
         InitializeComponent();
         RegisterRoutes();
     }
+
     private static void RegisterRoutes()
     {
         Routing.RegisterRoute("logradouro", typeof(LogradouroPage));
+        Routing.RegisterRoute("configuracoes", typeof(ConfigPage));
     }
 }

@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:AcademiaDoZe.Presentation.AppMaui.ViewModels"
-             xmlns:dto="clr-namespace:AcademiaDoZe.Application.DTOs;assembly=AcademiaDoZe.Application"
-             x:Class="AcademiaDoZe.Presentation.AppMaui.Views.LogradouroListPage"
-             x:DataType="vm:LogradouroListViewModel"
-             Title="{Binding Title}">
+              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              xmlns:vm="clr-namespace:AcademiaDoZe.Presentation.AppMaui.ViewModels"
+              xmlns:dto="clr-namespace:AcademiaDoZe.Application.DTOs;assembly=AcademiaDoZe.Application"
+              x:Class="AcademiaDoZe.Presentation.AppMaui.Views.LogradouroListPage"
+              x:DataType="vm:LogradouroListViewModel"
+              Title="{Binding Title}">
 
     <Grid RowDefinitions="Auto, *">
         <!-- Barra de Busca, Filtro e Inclusão -->
         <Grid Grid.Row="0" RowDefinitions="Auto, Auto" ColumnDefinitions="*, Auto" Padding="10" RowSpacing="8" ColumnSpacing="10">
             <SearchBar Grid.Row="0" Grid.Column="0" Placeholder="Pesquisar..." Text="{Binding SearchText}" />
-            <Button Grid.Row="0" Grid.Column="1" Text="+ Novo" Style="{StaticResource ButtonPrimary}" Command="{Binding AddLogradouroCommand}" />
+            <Button Grid.Row="0" Grid.Column="1" Text="Novo" Style="{StaticResource ButtonPrimary}" Command="{Binding AddLogradouroCommand}">
+                <Button.ImageSource>
+                    <FontImageSource FontFamily="MaterialIcons" Glyph="&#xe145;" />
+                </Button.ImageSource>
+            </Button>
             
             <HorizontalStackLayout Grid.Row="1" Grid.ColumnSpan="2" Spacing="10" VerticalOptions="Center">
                 <Label Text="Filtrar por:" VerticalOptions="Center"/>
@@ -43,8 +47,16 @@
                                     </Label>
                                 </VerticalStackLayout>
                                 <HorizontalStackLayout Grid.Column="1" Spacing="6" VerticalOptions="Center">
-                                    <Button Text="Editar" Style="{StaticResource ButtonSecondary}" Clicked="OnEditButtonClicked" />
-                                    <Button Text="Excluir" Style="{StaticResource ButtonDanger}" Clicked="OnDeleteButtonClicked" />
+                                    <Button Text="Editar" Style="{StaticResource ButtonSecondary}" Clicked="OnEditButtonClicked">
+                                        <Button.ImageSource>
+                                            <FontImageSource FontFamily="MaterialIcons" Glyph="&#xe3c9;" />
+                                        </Button.ImageSource>
+                                    </Button>
+                                    <Button Text="Excluir" Style="{StaticResource ButtonDanger}" Clicked="OnDeleteButtonClicked">
+                                        <Button.ImageSource>
+                                            <FontImageSource FontFamily="MaterialIcons" Glyph="&#xe872;" />
+                                        </Button.ImageSource>
+                                    </Button>
                                 </HorizontalStackLayout>
                             </Grid>
                         </Border>

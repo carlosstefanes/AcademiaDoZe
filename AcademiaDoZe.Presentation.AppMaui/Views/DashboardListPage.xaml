@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AcademiaDoZe.Presentation.AppMaui.Views.DashboardListPage"
-             xmlns:vm="clr-namespace:AcademiaDoZe.Presentation.AppMaui.ViewModels"
-             x:DataType="vm:DashboardListViewModel"
-             Title="{Binding Title}">
+              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              x:Class="AcademiaDoZe.Presentation.AppMaui.Views.DashboardListPage"
+              xmlns:vm="clr-namespace:AcademiaDoZe.Presentation.AppMaui.ViewModels"
+              x:DataType="vm:DashboardListViewModel"
+              Title="{Binding Title}">
     <ScrollView>
         <Grid RowDefinitions="Auto,*" Padding="20">
             <StackLayout Grid.Row="0" Spacing="10" Margin="0,0,0,20">
                 <Image Source="academiadoze.png" HorizontalOptions="Center" VerticalOptions="Start" HeightRequest="180" WidthRequest="180"/>
-                <Label Text="Academia do Zé" Style="{StaticResource Headline}" HorizontalTextAlignment="Center"/>
+                <Label Text="Carlos Eduardo Pomerening" Style="{StaticResource Headline}" HorizontalTextAlignment="Center"/>
                 <Label Text="Sistema de Gerenciamento" Style="{StaticResource SubHeadline}" HorizontalTextAlignment="Center"/>
             </StackLayout>
 
@@ -20,6 +20,7 @@
                         <TapGestureRecognizer Command="{Binding NavigateToLogradourosCommand}"/>
                     </Border.GestureRecognizers>
                     <StackLayout Spacing="10">
+                        <Label FontFamily="MaterialIcons" Text="&#xe7f1;" FontSize="32" HorizontalTextAlignment="Center" />
                         <Label Text="{Binding TotalLogradouros}" Style="{StaticResource SubHeadline}" HorizontalTextAlignment="Center"/>
                         <Label Text="Logradouros" HorizontalTextAlignment="Center"/>
                     </StackLayout>
@@ -31,6 +32,7 @@
                         <TapGestureRecognizer Command="{Binding NavigateToAlunosCommand}"/>
                     </Border.GestureRecognizers>
                     <StackLayout Spacing="10">
+                        <Label FontFamily="MaterialIcons" Text="&#xe80c;" FontSize="32" HorizontalTextAlignment="Center" />
                         <Label Text="{Binding TotalAlunos}" Style="{StaticResource SubHeadline}" HorizontalTextAlignment="Center"/>
                         <Label Text="Alunos" HorizontalTextAlignment="Center"/>
                     </StackLayout>
@@ -42,6 +44,7 @@
                         <TapGestureRecognizer Command="{Binding NavigateToColaboradoresCommand}"/>
                     </Border.GestureRecognizers>
                     <StackLayout Spacing="10">
+                        <Label FontFamily="MaterialIcons" Text="&#xea67;" FontSize="32" HorizontalTextAlignment="Center" />
                         <Label Text="{Binding TotalColaboradores}" Style="{StaticResource SubHeadline}" HorizontalTextAlignment="Center"/>
                         <Label Text="Colaboradores" HorizontalTextAlignment="Center"/>
                     </StackLayout>
@@ -53,6 +56,7 @@
                         <TapGestureRecognizer Command="{Binding NavigateToMatriculasCommand}"/>
                     </Border.GestureRecognizers>
                     <StackLayout Spacing="10">
+                        <Label FontFamily="MaterialIcons" Text="&#xefec;" FontSize="32" HorizontalTextAlignment="Center" />
                         <Label Text="{Binding TotalMatriculas}" Style="{StaticResource SubHeadline}" HorizontalTextAlignment="Center"/>
                         <Label Text="Matrículas" HorizontalTextAlignment="Center"/>
                     </StackLayout>
