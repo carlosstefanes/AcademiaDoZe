@@ -42,12 +42,14 @@ public static class ConfigurationHelper
             {
                 if (DeviceInfo.Platform == DevicePlatform.WinUI)
                 {
-                    if (File.Exists(@"D:\atv 5\academia_test.db"))
+                    if (File.Exists(@"D:\Atividade do Ze\academia_test.db"))
+                        dbPath = @"D:\Atividade do Ze\academia_test.db";
+                    else if (File.Exists(@"D:\atv 5\academia_test.db"))
                         dbPath = @"D:\atv 5\academia_test.db";
                     else if (File.Exists(@"C:\DEV\AcademiaDoZe\db_academia_do_ze.db"))
                         dbPath = @"C:\DEV\AcademiaDoZe\db_academia_do_ze.db";
                     else
-                        dbPath = @"D:\atv 5\academia_test.db";
+                        dbPath = @"D:\Atividade do Ze\academia_test.db";
                 }
                 else
                 {
