@@ -74,5 +74,15 @@ public partial class DashboardListViewModel : BaseViewModel
     [RelayCommand]
     private async Task NavigateToMatriculasAsync() => await Shell.Current.GoToAsync("//matriculas");
     [RelayCommand]
-    private async Task NavigateToAcessoAsync() => await Shell.Current.GoToAsync("//acesso");
+    private async Task NavigateToAcessoAsync()
+    {
+        try
+        {
+            await Shell.Current.GoToAsync("//acesso");
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlertAsync("Erro", $"Erro ao abrir Controle de Acesso: {ex.Message}", "OK");
+        }
+    }
 }

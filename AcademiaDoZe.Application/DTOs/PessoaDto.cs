@@ -15,5 +15,7 @@ public abstract class PessoaDto
     public string? Complemento { get; set; }
     public string Senha { get; set; } = string.Empty;
     public ArquivoDto? Foto { get; set; }
+
+    public override string ToString() => Nome;
 }
 

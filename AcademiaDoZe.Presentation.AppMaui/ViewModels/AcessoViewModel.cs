@@ -59,6 +59,9 @@ public partial class AcessoViewModel : BaseViewModel
     public Color ColaboradorButtonColor => !IsAlunoMode ? Color.FromArgb("#512BD4") : Color.FromArgb("#334155");
     public Color ColaboradorButtonTextColor => !IsAlunoMode ? Colors.White : Color.FromArgb("#94A3B8");
 
+    public bool TemAcessosHoje => AcessosHoje.Count > 0;
+    public bool NaoTemAcessosHoje => AcessosHoje.Count == 0;
+
     public void NotificarVisual()
     {
         OnPropertyChanged(nameof(TemPessoaSelecionada));
@@ -76,6 +79,8 @@ public partial class AcessoViewModel : BaseViewModel
         OnPropertyChanged(nameof(ModoAtualTexto));
         OnPropertyChanged(nameof(PessoasLabel));
         OnPropertyChanged(nameof(PickerPlaceholder));
+        OnPropertyChanged(nameof(TemAcessosHoje));
+        OnPropertyChanged(nameof(NaoTemAcessosHoje));
     }
 
     public ObservableCollection<PessoaDto> PessoasDisponiveis { get; } = [];
@@ -170,81 +175,90 @@ public partial class AcessoViewModel : BaseViewModel
 
     private void FiltrarPessoas()
     {
-        PessoasDisponiveis.Clear();
-        string termo = SearchText?.Trim().ToLowerInvariant() ?? string.Empty;
-
-        if (IsAlunoMode)
+        MainThread.BeginInvokeOnMainThread(() =>
         {
-            var query = _todosAlunos.AsEnumerable();
-            if (!string.IsNullOrWhiteSpace(termo))
+            string termo = SearchText?.Trim().ToLowerInvariant() ?? string.Empty;
+            int currentSelectedId = SelectedPessoa?.Id ?? 0;
+
+            var novaLista = new List<PessoaDto>();
+            if (IsAlunoMode)
             {
-                query = query.Where(a =>
-                    (a.Nome?.ToLowerInvariant().Contains(termo) ?? false) ||
-                    (a.Cpf?.Contains(termo) ?? false) ||
-                    a.Id.ToString() == termo);
+                var query = _todosAlunos.AsEnumerable();
+                if (!string.IsNullOrWhiteSpace(termo))
+                {
+                    query = query.Where(a =>
+                        (a.Nome?.ToLowerInvariant().Contains(termo) ?? false) ||
+                        (a.Cpf?.Contains(termo) ?? false) ||
+                        a.Id.ToString() == termo);
+                }
+                novaLista.AddRange(query);
             }
-            foreach (var a in query)
+            else
             {
-                PessoasDisponiveis.Add(a);
+                var query = _todosColaboradores.AsEnumerable();
+                if (!string.IsNullOrWhiteSpace(termo))
+                {
+                    query = query.Where(c =>
+                        (c.Nome?.ToLowerInvariant().Contains(termo) ?? false) ||
+                        (c.Cpf?.Contains(termo) ?? false) ||
+                        c.Id.ToString() == termo);
+                }
+                novaLista.AddRange(query);
             }
 
-            if (SelectedPessoa == null && PessoasDisponiveis.Count > 0)
+            PessoasDisponiveis.Clear();
+            foreach (var p in novaLista)
             {
-                SelectedPessoa = PessoasDisponiveis[0];
-            }
-        }
-        else
-        {
-            var query = _todosColaboradores.AsEnumerable();
-            if (!string.IsNullOrWhiteSpace(termo))
-            {
-                query = query.Where(c =>
-                    (c.Nome?.ToLowerInvariant().Contains(termo) ?? false) ||
-                    (c.Cpf?.Contains(termo) ?? false) ||
-                    c.Id.ToString() == termo);
-            }
-            foreach (var c in query)
-            {
-                PessoasDisponiveis.Add(c);
+                PessoasDisponiveis.Add(p);
             }
 
-            if (SelectedPessoa == null && PessoasDisponiveis.Count > 0)
-            {
-                SelectedPessoa = PessoasDisponiveis[0];
-            }
-        }
+            SelectedPessoa = PessoasDisponiveis.FirstOrDefault(p => p.Id == currentSelectedId)
+                             ?? PessoasDisponiveis.FirstOrDefault();
+
+            NotificarVisual();
+        });
     }
 
     private async Task AtualizarStatusPessoaAsync()
     {
-        if (SelectedPessoa == null || SelectedPessoa.Id <= 0)
+        var pessoa = SelectedPessoa;
+        if (pessoa == null || pessoa.Id <= 0)
         {
-            EstaNaAcademia = false;
-            OnPropertyChanged(nameof(StatusTexto));
-            OnPropertyChanged(nameof(BotaoAcaoTexto));
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                EstaNaAcademia = false;
+                NotificarVisual();
+            });
             return;
         }
 
+        bool dentro = false;
         try
         {
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
             if (IsAlunoMode)
             {
-                EstaNaAcademia = await _acessoService.AlunoEstaNaAcademiaAsync(SelectedPessoa.Id, cts.Token);
+                dentro = await _acessoService.AlunoEstaNaAcademiaAsync(pessoa.Id, cts.Token);
             }
             else
             {
-                EstaNaAcademia = await _acessoService.ColaboradorEstaNaAcademiaAsync(SelectedPessoa.Id, cts.Token);
+                dentro = await _acessoService.ColaboradorEstaNaAcademiaAsync(pessoa.Id, cts.Token);
             }
         }
-        catch
+        catch (Exception ex)
         {
-            EstaNaAcademia = false;
+            System.Diagnostics.Debug.WriteLine($"[AcessoViewModel] Erro ao verificar status: {ex.Message}");
+            dentro = false;
         }
 
-        OnPropertyChanged(nameof(StatusTexto));
-        OnPropertyChanged(nameof(BotaoAcaoTexto));
-        NotificarVisual();
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            if (SelectedPessoa?.Id == pessoa.Id)
+            {
+                EstaNaAcademia = dentro;
+                NotificarVisual();
+            }
+        });
     }
 
     [RelayCommand]
@@ -321,13 +335,18 @@ public partial class AcessoViewModel : BaseViewModel
         try
         {
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-            var historico = await _acessoService.ObterTodosAcessosDeHojeAsync(cts.Token);
+            var historico = (await _acessoService.ObterTodosAcessosDeHojeAsync(cts.Token)).ToList();
 
-            AcessosHoje.Clear();
-            foreach (var item in historico)
+            await MainThread.InvokeOnMainThreadAsync(() =>
             {
-                AcessosHoje.Add(item);
-            }
+                AcessosHoje.Clear();
+                foreach (var item in historico)
+                {
+                    AcessosHoje.Add(item);
+                }
+                OnPropertyChanged(nameof(TemAcessosHoje));
+                OnPropertyChanged(nameof(NaoTemAcessosHoje));
+            });
         }
         catch (Exception ex)
         {

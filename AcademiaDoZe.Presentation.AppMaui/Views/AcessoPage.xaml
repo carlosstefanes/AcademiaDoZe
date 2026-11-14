@@ -126,16 +126,11 @@
                         </Button>
                     </Grid>
 
-                    <CollectionView ItemsSource="{Binding AcessosHoje}" SelectionMode="None">
-                        <CollectionView.EmptyView>
-                            <VerticalStackLayout Padding="20" Spacing="8" HorizontalOptions="Center">
-                                <Label Text="&#xe88e;" FontFamily="MaterialIcons" FontSize="36" HorizontalTextAlignment="Center" TextColor="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray600}}"/>
-                                <Label Text="Nenhum acesso registrado hoje." FontSize="13" HorizontalTextAlignment="Center" TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
-                            </VerticalStackLayout>
-                        </CollectionView.EmptyView>
-                        <CollectionView.ItemTemplate>
+                    <!-- Lista de Acessos com BindableLayout -->
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding AcessosHoje}" Spacing="6">
+                        <BindableLayout.ItemTemplate>
                             <DataTemplate x:DataType="dto:AcessoHistoricoItemDto">
-                                <Border Margin="0,3" Padding="10" StrokeShape="RoundRectangle 8" BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}" Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray800}}">
+                                <Border Margin="0,2" Padding="10" StrokeShape="RoundRectangle 8" BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}" Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray800}}">
                                     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" VerticalOptions="Center">
                                         <VerticalStackLayout Grid.Column="0" Spacing="2" VerticalOptions="Center">
                                             <Label Text="{Binding NomePessoa}" FontAttributes="Bold" FontSize="13"/>
@@ -145,8 +140,14 @@
                                     </Grid>
                                 </Border>
                             </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+
+                    <!-- Mensagem quando não há acessos hoje -->
+                    <VerticalStackLayout IsVisible="{Binding NaoTemAcessosHoje}" Padding="20" Spacing="8" HorizontalOptions="Center">
+                        <Label Text="&#xe88e;" FontFamily="MaterialIcons" FontSize="36" HorizontalTextAlignment="Center" TextColor="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray600}}"/>
+                        <Label Text="Nenhum acesso registrado hoje." FontSize="13" HorizontalTextAlignment="Center" TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
             </Border>
 
