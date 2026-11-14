@@ -25,25 +25,13 @@
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,5">
                         <Button Grid.Column="0" Text="&#xe80c;  Aluno" FontFamily="MaterialIcons" FontSize="14" HeightRequest="45"
                                 Command="{Binding SelecionarModoAlunoCommand}"
-                                Style="{StaticResource ButtonPrimary}">
-                            <Button.Triggers>
-                                <DataTrigger TargetType="Button" Binding="{Binding IsAlunoMode}" Value="False">
-                                    <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#E2E8F0, Dark=#1E293B}"/>
-                                    <Setter Property="TextColor" Value="{AppThemeBinding Light=#475569, Dark=#94A3B8}"/>
-                                </DataTrigger>
-                            </Button.Triggers>
-                        </Button>
+                                BackgroundColor="{Binding AlunoButtonColor}"
+                                TextColor="{Binding AlunoButtonTextColor}"/>
 
                         <Button Grid.Column="1" Text="&#xea67;  Colaborador" FontFamily="MaterialIcons" FontSize="14" HeightRequest="45"
                                 Command="{Binding SelecionarModoColaboradorCommand}"
-                                Style="{StaticResource ButtonPrimary}">
-                            <Button.Triggers>
-                                <DataTrigger TargetType="Button" Binding="{Binding IsAlunoMode}" Value="True">
-                                    <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#E2E8F0, Dark=#1E293B}"/>
-                                    <Setter Property="TextColor" Value="{AppThemeBinding Light=#475569, Dark=#94A3B8}"/>
-                                </DataTrigger>
-                            </Button.Triggers>
-                        </Button>
+                                BackgroundColor="{Binding ColaboradorButtonColor}"
+                                TextColor="{Binding ColaboradorButtonTextColor}"/>
                     </Grid>
 
                     <Label Text="{Binding ModoAtualTexto}" FontSize="12" FontAttributes="Bold" TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark=#818CF8}" HorizontalTextAlignment="Center"/>
@@ -94,22 +82,8 @@
 
                                 <!-- Badge de Status Dentro / Fora -->
                                 <Border Margin="0,4,0,0" Padding="8,3" HorizontalOptions="Start" StrokeShape="RoundRectangle 6"
-                                        BackgroundColor="#1E293B">
-                                    <Border.Triggers>
-                                        <DataTrigger TargetType="Border" Binding="{Binding EstaNaAcademia}" Value="True">
-                                            <Setter Property="BackgroundColor" Value="#065F46"/>
-                                        </DataTrigger>
-                                    </Border.Triggers>
-                                    <Label Text="{Binding StatusTexto}" FontSize="11" FontAttributes="Bold">
-                                        <Label.Triggers>
-                                            <DataTrigger TargetType="Label" Binding="{Binding EstaNaAcademia}" Value="True">
-                                                <Setter Property="TextColor" Value="#34D399"/>
-                                            </DataTrigger>
-                                            <DataTrigger TargetType="Label" Binding="{Binding EstaNaAcademia}" Value="False">
-                                                <Setter Property="TextColor" Value="#CBD5E1"/>
-                                            </DataTrigger>
-                                        </Label.Triggers>
-                                    </Label>
+                                        BackgroundColor="{Binding BadgeBackgroundColor}">
+                                    <Label Text="{Binding StatusTexto}" FontSize="11" FontAttributes="Bold" TextColor="{Binding BadgeTextColor}"/>
                                 </Border>
                             </VerticalStackLayout>
                         </Grid>
@@ -126,28 +100,11 @@
 
                     <!-- Banner de Feedback (Sucesso / Negado) -->
                     <Border IsVisible="{Binding FeedbackVisivel}"
-                            Padding="12" StrokeShape="RoundRectangle 8">
-                        <Border.Triggers>
-                            <DataTrigger TargetType="Border" Binding="{Binding FeedbackSucesso}" Value="True">
-                                <Setter Property="BackgroundColor" Value="#064E3B"/>
-                                <Setter Property="Stroke" Value="#059669"/>
-                            </DataTrigger>
-                            <DataTrigger TargetType="Border" Binding="{Binding FeedbackSucesso}" Value="False">
-                                <Setter Property="BackgroundColor" Value="#7F1D1D"/>
-                                <Setter Property="Stroke" Value="#DC2626"/>
-                            </DataTrigger>
-                        </Border.Triggers>
+                            Padding="12" StrokeShape="RoundRectangle 8"
+                            BackgroundColor="{Binding FeedbackBackgroundColor}"
+                            Stroke="{Binding FeedbackBorderColor}">
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12" VerticalOptions="Center">
-                            <Label Grid.Column="0" FontFamily="MaterialIcons" FontSize="26" VerticalOptions="Center" TextColor="White">
-                                <Label.Triggers>
-                                    <DataTrigger TargetType="Label" Binding="{Binding FeedbackSucesso}" Value="True">
-                                        <Setter Property="Text" Value="&#xe86c;"/>
-                                    </DataTrigger>
-                                    <DataTrigger TargetType="Label" Binding="{Binding FeedbackSucesso}" Value="False">
-                                        <Setter Property="Text" Value="&#xe000;"/>
-                                    </DataTrigger>
-                                </Label.Triggers>
-                            </Label>
+                            <Label Grid.Column="0" Text="{Binding FeedbackIcon}" FontFamily="MaterialIcons" FontSize="26" VerticalOptions="Center" TextColor="White"/>
                             <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
                                 <Label Text="{Binding FeedbackTitulo}" FontAttributes="Bold" FontSize="14" TextColor="White"/>
                                 <Label Text="{Binding FeedbackMensagem}" FontSize="12" TextColor="#F1F5F9" LineBreakMode="WordWrap"/>

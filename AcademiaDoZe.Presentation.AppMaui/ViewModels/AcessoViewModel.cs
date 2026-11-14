@@ -49,6 +49,35 @@ public partial class AcessoViewModel : BaseViewModel
     public string StatusTexto => EstaNaAcademia ? "DENTRO DA ACADEMIA" : "FORA DA ACADEMIA";
     public string BotaoAcaoTexto => EstaNaAcademia ? "Registrar Saída" : "Registrar Entrada";
 
+    public Color BadgeBackgroundColor => EstaNaAcademia ? Color.FromArgb("#065F46") : Color.FromArgb("#1E293B");
+    public Color BadgeTextColor => EstaNaAcademia ? Color.FromArgb("#34D399") : Color.FromArgb("#CBD5E1");
+    public Color FeedbackBackgroundColor => FeedbackSucesso ? Color.FromArgb("#064E3B") : Color.FromArgb("#7F1D1D");
+    public Color FeedbackBorderColor => FeedbackSucesso ? Color.FromArgb("#059669") : Color.FromArgb("#DC2626");
+    public string FeedbackIcon => FeedbackSucesso ? "\ue86c" : "\ue000";
+    public Color AlunoButtonColor => IsAlunoMode ? Color.FromArgb("#512BD4") : Color.FromArgb("#334155");
+    public Color AlunoButtonTextColor => IsAlunoMode ? Colors.White : Color.FromArgb("#94A3B8");
+    public Color ColaboradorButtonColor => !IsAlunoMode ? Color.FromArgb("#512BD4") : Color.FromArgb("#334155");
+    public Color ColaboradorButtonTextColor => !IsAlunoMode ? Colors.White : Color.FromArgb("#94A3B8");
+
+    public void NotificarVisual()
+    {
+        OnPropertyChanged(nameof(TemPessoaSelecionada));
+        OnPropertyChanged(nameof(StatusTexto));
+        OnPropertyChanged(nameof(BotaoAcaoTexto));
+        OnPropertyChanged(nameof(BadgeBackgroundColor));
+        OnPropertyChanged(nameof(BadgeTextColor));
+        OnPropertyChanged(nameof(FeedbackBackgroundColor));
+        OnPropertyChanged(nameof(FeedbackBorderColor));
+        OnPropertyChanged(nameof(FeedbackIcon));
+        OnPropertyChanged(nameof(AlunoButtonColor));
+        OnPropertyChanged(nameof(AlunoButtonTextColor));
+        OnPropertyChanged(nameof(ColaboradorButtonColor));
+        OnPropertyChanged(nameof(ColaboradorButtonTextColor));
+        OnPropertyChanged(nameof(ModoAtualTexto));
+        OnPropertyChanged(nameof(PessoasLabel));
+        OnPropertyChanged(nameof(PickerPlaceholder));
+    }
+
     public ObservableCollection<PessoaDto> PessoasDisponiveis { get; } = [];
     public ObservableCollection<AcessoHistoricoItemDto> AcessosHoje { get; } = [];
 
@@ -77,12 +106,9 @@ public partial class AcessoViewModel : BaseViewModel
     {
         if (IsAlunoMode) return;
         IsAlunoMode = true;
-        OnPropertyChanged(nameof(IsColaboradorMode));
-        OnPropertyChanged(nameof(ModoAtualTexto));
-        OnPropertyChanged(nameof(PessoasLabel));
-        OnPropertyChanged(nameof(PickerPlaceholder));
         SelectedPessoa = null;
         FeedbackVisivel = false;
+        NotificarVisual();
         FiltrarPessoas();
         await AtualizarStatusPessoaAsync();
     }
@@ -92,12 +118,9 @@ public partial class AcessoViewModel : BaseViewModel
     {
         if (!IsAlunoMode) return;
         IsAlunoMode = false;
-        OnPropertyChanged(nameof(IsColaboradorMode));
-        OnPropertyChanged(nameof(ModoAtualTexto));
-        OnPropertyChanged(nameof(PessoasLabel));
-        OnPropertyChanged(nameof(PickerPlaceholder));
         SelectedPessoa = null;
         FeedbackVisivel = false;
+        NotificarVisual();
         FiltrarPessoas();
         await AtualizarStatusPessoaAsync();
     }
@@ -221,6 +244,7 @@ public partial class AcessoViewModel : BaseViewModel
 
         OnPropertyChanged(nameof(StatusTexto));
         OnPropertyChanged(nameof(BotaoAcaoTexto));
+        NotificarVisual();
     }
 
     [RelayCommand]
@@ -232,6 +256,7 @@ public partial class AcessoViewModel : BaseViewModel
             FeedbackMensagem = "Por favor, selecione uma pessoa para registrar acesso.";
             FeedbackSucesso = false;
             FeedbackVisivel = true;
+            NotificarVisual();
             return;
         }
 
@@ -272,9 +297,8 @@ public partial class AcessoViewModel : BaseViewModel
             if (resultado.Sucesso)
             {
                 EstaNaAcademia = resultado.EstaNaAcademia;
-                OnPropertyChanged(nameof(StatusTexto));
-                OnPropertyChanged(nameof(BotaoAcaoTexto));
             }
+            NotificarVisual();
 
             await AtualizarHistoricoAsync();
         }

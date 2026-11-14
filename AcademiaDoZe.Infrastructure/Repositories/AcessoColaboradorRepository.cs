@@ -16,6 +16,50 @@ public class AcessoColaboradorRepository : BaseRepository<AcessoColaborador>, IA
     public AcessoColaboradorRepository(DatabaseType databaseType, string connectionString)
         : base(connectionString, databaseType) { }
 
+    private static bool _tableEnsured = false;
+    private static readonly object _lock = new();
+
+    private void EnsureTableCreated(DbConnection connection)
+    {
+        if (_tableEnsured) return;
+        lock (_lock)
+        {
+            if (_tableEnsured) return;
+            try
+            {
+                using var cmd = connection.CreateCommand();
+                cmd.CommandText = DatabaseType switch
+                {
+                    DatabaseType.SqlServer => @"
+                        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tb_acesso_colaborador' AND xtype='U')
+                        CREATE TABLE tb_acesso_colaborador (
+                            id_acesso_colaborador INT IDENTITY(1,1) PRIMARY KEY,
+                            colaborador_id INT NOT NULL,
+                            data_hora_entrada DATETIME NOT NULL,
+                            data_hora_saida DATETIME NULL
+                        );",
+                    DatabaseType.MySql => @"
+                        CREATE TABLE IF NOT EXISTS tb_acesso_colaborador (
+                            id_acesso_colaborador INT AUTO_INCREMENT PRIMARY KEY,
+                            colaborador_id INT NOT NULL,
+                            data_hora_entrada DATETIME NOT NULL,
+                            data_hora_saida DATETIME NULL
+                        );",
+                    _ => @"
+                        CREATE TABLE IF NOT EXISTS tb_acesso_colaborador (
+                            id_acesso_colaborador INTEGER PRIMARY KEY AUTOINCREMENT,
+                            colaborador_id INTEGER NOT NULL,
+                            data_hora_entrada TEXT NOT NULL,
+                            data_hora_saida TEXT
+                        );"
+                };
+                cmd.ExecuteNonQuery();
+                _tableEnsured = true;
+            }
+            catch { }
+        }
+    }
+
     private static string BaseSelectQuery => @"
         SELECT 
             acc.id_acesso_colaborador, acc.colaborador_id, acc.data_hora_entrada, acc.data_hora_saida,
@@ -32,6 +76,7 @@ public class AcessoColaboradorRepository : BaseRepository<AcessoColaborador>, IA
         {
             using var connection = DbProvider.GetConnection(DatabaseType, ConnectionString);
             await connection.OpenAsync(cancellationToken);
+            EnsureTableCreated(connection);
 
             using var command = connection.CreateCommand();
             command.CommandText = $"{BaseSelectQuery} WHERE acc.id_acesso_colaborador = @Id";
@@ -52,6 +97,7 @@ public class AcessoColaboradorRepository : BaseRepository<AcessoColaborador>, IA
         {
             using var connection = DbProvider.GetConnection(DatabaseType, ConnectionString);
             await connection.OpenAsync(cancellationToken);
+            EnsureTableCreated(connection);
 
             using var command = connection.CreateCommand();
             command.CommandText = $"{BaseSelectQuery} ORDER BY acc.data_hora_entrada DESC";
@@ -76,6 +122,7 @@ public class AcessoColaboradorRepository : BaseRepository<AcessoColaborador>, IA
         {
             using var connection = DbProvider.GetConnection(DatabaseType, ConnectionString);
             await connection.OpenAsync(cancellationToken);
+            EnsureTableCreated(connection);
 
             using var command = connection.CreateCommand();
             command.CommandText = $"{BaseSelectQuery} WHERE acc.colaborador_id = @ColaboradorId ORDER BY acc.data_hora_entrada DESC";
@@ -101,6 +148,7 @@ public class AcessoColaboradorRepository : BaseRepository<AcessoColaborador>, IA
         {
             using var connection = DbProvider.GetConnection(DatabaseType, ConnectionString);
             await connection.OpenAsync(cancellationToken);
+            EnsureTableCreated(connection);
 
             using var command = connection.CreateCommand();
             command.CommandText = $"{BaseSelectQuery} WHERE acc.colaborador_id = @ColaboradorId AND acc.data_hora_saida IS NULL ORDER BY acc.data_hora_entrada DESC";
@@ -121,6 +169,7 @@ public class AcessoColaboradorRepository : BaseRepository<AcessoColaborador>, IA
         {
             using var connection = DbProvider.GetConnection(DatabaseType, ConnectionString);
             await connection.OpenAsync(cancellationToken);
+            EnsureTableCreated(connection);
 
             string dateCondition = DatabaseType switch
             {
@@ -153,6 +202,7 @@ public class AcessoColaboradorRepository : BaseRepository<AcessoColaborador>, IA
         {
             using var connection = DbProvider.GetConnection(DatabaseType, ConnectionString);
             await connection.OpenAsync(cancellationToken);
+            EnsureTableCreated(connection);
 
             string dateCondition = DatabaseType switch
             {
@@ -191,6 +241,7 @@ public class AcessoColaboradorRepository : BaseRepository<AcessoColaborador>, IA
         {
             using var connection = DbProvider.GetConnection(DatabaseType, ConnectionString);
             await connection.OpenAsync(cancellationToken);
+            EnsureTableCreated(connection);
 
             using var command = connection.CreateCommand();
             string query = DatabaseType switch
@@ -231,6 +282,7 @@ public class AcessoColaboradorRepository : BaseRepository<AcessoColaborador>, IA
         {
             using var connection = DbProvider.GetConnection(DatabaseType, ConnectionString);
             await connection.OpenAsync(cancellationToken);
+            EnsureTableCreated(connection);
 
             using var command = connection.CreateCommand();
             command.CommandText = @"
@@ -259,6 +311,7 @@ public class AcessoColaboradorRepository : BaseRepository<AcessoColaborador>, IA
         {
             using var connection = DbProvider.GetConnection(DatabaseType, ConnectionString);
             await connection.OpenAsync(cancellationToken);
+            EnsureTableCreated(connection);
 
             using var command = connection.CreateCommand();
             command.CommandText = "DELETE FROM tb_acesso_colaborador WHERE id_acesso_colaborador = @Id";

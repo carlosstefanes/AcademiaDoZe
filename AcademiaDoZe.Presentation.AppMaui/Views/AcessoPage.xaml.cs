@@ -13,9 +13,17 @@ public partial class AcessoPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        if (BindingContext is AcessoViewModel vm)
+        try
         {
-            await vm.InitializeAsync();
+            if (BindingContext is AcessoViewModel vm)
+            {
+                await vm.InitializeAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[AcessoPage OnAppearing] Erro: {ex}");
+            await DisplayAlertAsync("Erro", $"Erro ao carregar Controle de Acesso: {ex.Message}", "OK");
         }
     }
 }
