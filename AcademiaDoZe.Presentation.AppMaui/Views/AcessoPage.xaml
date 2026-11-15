@@ -23,15 +23,23 @@
 
                     <!-- Botões de Alternância Aluno / Colaborador -->
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,5">
-                        <Button Grid.Column="0" Text="&#xe80c;  Aluno" FontFamily="MaterialIcons" FontSize="14" HeightRequest="45"
+                        <Button Grid.Column="0" Text="Aluno" FontSize="14" HeightRequest="45"
                                 Command="{Binding SelecionarModoAlunoCommand}"
                                 BackgroundColor="{Binding AlunoButtonColor}"
-                                TextColor="{Binding AlunoButtonTextColor}"/>
+                                TextColor="{Binding AlunoButtonTextColor}">
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="MaterialIcons" Glyph="&#xe80c;" Color="{Binding AlunoButtonTextColor}" Size="18"/>
+                            </Button.ImageSource>
+                        </Button>
 
-                        <Button Grid.Column="1" Text="&#xea67;  Colaborador" FontFamily="MaterialIcons" FontSize="14" HeightRequest="45"
+                        <Button Grid.Column="1" Text="Colaborador" FontSize="14" HeightRequest="45"
                                 Command="{Binding SelecionarModoColaboradorCommand}"
                                 BackgroundColor="{Binding ColaboradorButtonColor}"
-                                TextColor="{Binding ColaboradorButtonTextColor}"/>
+                                TextColor="{Binding ColaboradorButtonTextColor}">
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="MaterialIcons" Glyph="&#xea67;" Color="{Binding ColaboradorButtonTextColor}" Size="18"/>
+                            </Button.ImageSource>
+                        </Button>
                     </Grid>
 
                     <Label Text="{Binding ModoAtualTexto}" FontSize="12" FontAttributes="Bold" TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark=#818CF8}" HorizontalTextAlignment="Center"/>
